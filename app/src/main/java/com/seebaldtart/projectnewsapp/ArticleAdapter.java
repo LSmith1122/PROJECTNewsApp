@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 public class ArticleAdapter extends ArrayAdapter<Article> {
+    private Context context = getContext();
     static ArrayList<Article> articleList;
     private ImageView imageView;
     private Article currentArticle;
@@ -31,10 +32,10 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.custom_list_item, parent, false);
         }
         currentArticle = articleList.get(position);
-        imageView = (ImageView) convertView.findViewById(R.id.image);
-        titleText = (TextView) convertView.findViewById(R.id.title_text);
-        bodyText = (TextView) convertView.findViewById(R.id.body_text);
-        metaText = (TextView) convertView.findViewById(R.id.meta_text);
+        imageView = convertView.findViewById(R.id.image);
+        titleText = convertView.findViewById(R.id.title_text);
+        bodyText = convertView.findViewById(R.id.body_text);
+        metaText = convertView.findViewById(R.id.meta_text);
         setImage(currentArticle.getArticleImage());
         setDescriptionText(titleText, currentArticle.getArticleTitle(), maxEmsTitle);
         setDescriptionText(bodyText, currentArticle.getBody(), maxEmsBody);
@@ -62,22 +63,23 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         view.setText(builder.toString());
     }
     private void setMetaText(TextView view, String section, String author, String date) {
+        section = QueryUtils.checkEntry(context, section);
+        author = QueryUtils.checkEntry(context, author);
         date = convertDateTime(date);
-        Log.i("TEST", "Date: " + date);
-        if (author == null || author.equals("")) {
-            author = getContext().getString(R.string.no_author);
-        }
         String metaString = section + " / " + author + " / " + date;
         view.setText(metaString);
-        Log.i("TEST", "Author: " + author + ", Date: " + date);
     }
     private String convertDateTime(String dateString) {     // Retrieved from: https://beginnersbook.com/2013/04/java-string-to-date-conversion/
-        dateString = dateString.substring(0, 10);
-        String divider = "-";
-        String[] dateList = dateString.split(divider);
-        String year = dateList[0];
-        String month = dateList[1];
-        String day = dateList[2];
-        return month + divider + day + divider + year;
+        dateString = QueryUtils.checkEntry(context, dateString);
+        if (!dateString.equals(getContext().getString(R.string.no_entry))) {
+            dateString = dateString.substring(0, 10);
+            String divider = "-";
+            String[] dateList = dateString.split(divider);
+            String year = dateList[0];
+            String month = dateList[1];
+            String day = dateList[2];
+            return month + divider + day + divider + year;
+        }
+        return dateString;
     }
 }

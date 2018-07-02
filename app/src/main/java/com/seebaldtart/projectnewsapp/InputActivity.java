@@ -13,8 +13,8 @@ public class InputActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
-        searchBar = (SearchView) findViewById(R.id.search_bar);
-        final Button search_button = (Button) findViewById(R.id.search_button);
+        searchBar = findViewById(R.id.search_bar);
+        final Button search_button = findViewById(R.id.search_button);
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -22,7 +22,6 @@ public class InputActivity extends AppCompatActivity {
                 QueryUtils.performSearch(getApplicationContext(), query, searchBar);
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 queryString = newText;
@@ -36,14 +35,4 @@ public class InputActivity extends AppCompatActivity {
             }
         });
     }
-//    private void performSearch(String query, SearchView view) {
-//        if (!view.getQuery().equals("")) {
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("tag", query);
-//            intent.putExtras(bundle);
-//            Log.i("TEST", "User Input: " + query);
-//            startActivity(intent);
-//        }
-//    }
 }

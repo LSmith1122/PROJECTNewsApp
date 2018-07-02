@@ -111,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return state;
     }
     private void initViews() {
-        listView = (ListView) findViewById(R.id.list);
-        emptyText = (TextView) findViewById(R.id.empty_text);
-        loadingGroup = (LinearLayout) findViewById(R.id.loading_group);
-        searchbar = (SearchView) findViewById(R.id.search_bar);
-        TextView loadingText = (TextView) findViewById(R.id.loading_text);
+        listView = findViewById(R.id.list);
+        emptyText = findViewById(R.id.empty_text);
+        loadingGroup = findViewById(R.id.loading_group);
+        searchbar = findViewById(R.id.search_bar);
+        TextView loadingText = findViewById(R.id.loading_text);
         loadingText.setText(getString(R.string.loading));
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -131,7 +131,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
     private void updateUI(ArrayList<Article> articles) {
         loadingGroup.setVisibility(View.GONE);
-        if (articles == null) {
+        Log.i("TEST", "Article Size: " + articles.size());
+        if (articles.isEmpty()) {
             listView.setEmptyView(emptyText);
             emptyText.setText(getString(R.string.empty_text));
         } else {

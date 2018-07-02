@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +74,7 @@ public final class QueryUtils {
             }
         }
     }
-    private static String readInputStream(InputStream inputStream) throws IOException {
+    private static String readInputStream(InputStream inputStream) {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
             try {
@@ -126,7 +125,7 @@ public final class QueryUtils {
                 String date = currentArticle.getString("webPublicationDate");
                 String section = currentArticle.getString("sectionName");
                 Bitmap thumbnail = getBitmap(thumbnailString);
-                articles.add(new Article(title, author, bodyText, date, section, url, thumbnail));
+                articles.add(new Article(mContext, title, author, bodyText, date, section, url, thumbnail));
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);
@@ -161,5 +160,12 @@ public final class QueryUtils {
             context.startActivity(intent);
 
         }
+    }
+    public static String checkEntry(Context context, String entry) {
+        if (entry.equals(null) || entry.equals("")) {
+            entry = context.getString(R.string.no_entry);
+            return entry;
+        }
+        return entry;
     }
 }
