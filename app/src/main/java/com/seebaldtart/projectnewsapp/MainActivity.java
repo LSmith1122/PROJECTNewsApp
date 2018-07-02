@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 emptyText.setText(getString(R.string.no_internet_connection));
             }
         } catch (NullPointerException e) {
-            Log.e(LOG_TAG, "Possible null key: " + tag, e);
+            Log.e(LOG_TAG, "Possible null Bundle Key: " + tag, e);
         }
     }
     private String compileInfo(String input) {
@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
     private void updateUI(ArrayList<Article> articles) {
         loadingGroup.setVisibility(View.GONE);
-        Log.i("TEST", "Article Size: " + articles.size());
         if (articles.isEmpty()) {
             listView.setEmptyView(emptyText);
             emptyText.setText(getString(R.string.empty_text));
@@ -147,8 +146,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
     @Override
     public Loader<ArrayList<Article>> onCreateLoader(int id, Bundle args) {
-        ArticleTaskLoader loader = new ArticleTaskLoader(this, customURL);
-        return loader;
+        return new ArticleTaskLoader(this, customURL);
     }
     @Override
     public void onLoadFinished(Loader<ArrayList<Article>> loader, ArrayList<Article> data) {
