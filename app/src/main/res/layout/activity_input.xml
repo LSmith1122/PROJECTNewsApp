@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".InputActivity">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/default_linear_layout"
         android:orientation="horizontal"
         android:layout_centerInParent="true">
         <TextView
@@ -22,18 +21,13 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/default_text_view"
                 android:text="@string/search_info"
                 android:textSize="16sp"/>
             <SearchView
                 android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:queryHint="@string/example_search_hint"
-                android:elevation="4dp"
-                android:iconifiedByDefault="false"/>
+                style="@style/search_view"
+                android:queryHint="@string/example_search_hint" />
             <Button
                 android:id="@+id/search_button"
                 android:layout_width="match_parent"
