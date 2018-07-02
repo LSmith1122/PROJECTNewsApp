@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">PROJECTNewsApp</string>
+    <string name="search_hint">Search&#8230;</string>
+    <string name="example_search_hint">eg: Google</string>
+    <string name="search_info">Explore \'The Guardian\'&#8230;</string>
+    <string name="search">Search</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="empty_text">Unfortunately, there is no data to display&#8230;</string>
+    <string name="no_internet_connection">No internet connection.\nCheck network connection and try again.</string>
+    <string name="filterFrom">Date From: </string>
+    <string name="filterTo">To Date: </string>
+    <string name="api_key">c49528a8&#8211;efe3&#8211;4f88&#8211;87ea&#8211;13530bb963b5</string>
+    <string name="dummy_title">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit&#8211;</string>
+    <string name="dummy_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="no_author">Unknown</string>
+</resources>
