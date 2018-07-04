@@ -21,10 +21,10 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
             EditTextPreference userInput = (EditTextPreference) findPreference(getString(R.string.user_input_key));
+            userInput.setSelectable(false);
             userInput.setText(QueryUtils.getUserInput());
             Preference limit = findPreference(getString(R.string.settings_limit_key));
             Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
-            bindPreferenceSummaryToValue(userInput, QueryUtils.getUserInput());
             bindPreferenceSummaryToValue(limit);
             bindPreferenceSummaryToValue(orderBy);
         }
@@ -48,14 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
                 preference.setOnPreferenceChangeListener(this);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
                 String preferenceString = sharedPreferences.getString(preference.getKey(), "");
-                onPreferenceChange(preference, preferenceString);
-            }
-        }
-        private void bindPreferenceSummaryToValue(EditTextPreference preference, String newValue) {
-            if (preference != null) {
-                preference.setOnPreferenceChangeListener(this);
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-                String preferenceString = sharedPreferences.getString(newValue, "");
                 onPreferenceChange(preference, preferenceString);
             }
         }

@@ -155,10 +155,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Bundle bundle = new Bundle();
-            bundle.putString("tag", inputTag);
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            settingsIntent.putExtras(bundle);
             startActivity(settingsIntent);
             return true;
         }

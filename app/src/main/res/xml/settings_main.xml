@@ -19,6 +19,6 @@
         android:key="@string/user_input_key"
         android:inputType="text"
         android:selectAllOnFocus="false"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:clickable="false"/>
 </PreferenceScreen>
