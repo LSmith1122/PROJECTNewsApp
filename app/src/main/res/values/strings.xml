@@ -10,4 +10,18 @@
     <string name="dummy_title">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit&#8211;</string>
     <string name="dummy_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
     <string name="no_entry">Unknown</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_limit_label">Limit Articles Shown</string>
+    <string name="settings_limit_key" translatable="false">limit_articles</string>
+    <string name="settings_limit_default">10</string>
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_relevance_value</string>
+    <string name="settings_order_by_relevance_label">Relevance</string>
+    <string name="settings_order_by_relevance_value" translatable="false">relevance</string>
+    <string name="settings_order_by_newest_label">Newest</string>
+    <string name="settings_order_by_newest_value" translatable="false">newest</string>
+    <string name="user_input_key" translatable="false">user_input</string>
+    <string name="user_input_value" translatable="false"></string>
+    <string name="user_input_default" translatable="false">@string/user_input_value</string>
 </resources>

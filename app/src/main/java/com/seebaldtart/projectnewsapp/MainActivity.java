@@ -3,12 +3,16 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -20,28 +24,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final String LOG_TAG = getClass().getSimpleName();
     private String END_POINT_URL = "https://content.guardianapis.com/search?";
     private int ARTICLE_LOADER_ID = 0;
-    private String customURL;
-    private String userInputTag = "";
-    private String inputTag;
+    private static String inputTag;
     private ListView listView;
     private TextView emptyText;
     private LinearLayout loadingGroup;
     private SearchView searchbar;
     private ArticleAdapter adapter;
     private ArrayList<Article> articleList;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String tag = "tag";
         try {
-            inputTag = bundle.getString(tag);
+            if (getIntent().hasExtra(tag)) {
+                inputTag = bundle.getString(tag);
+            } else {
+                inputTag = getUserInput();
+            }
             String titleString = "\"" + inputTag + "\"";
             this.setTitle(titleString);
             initViews();
             if (isConnectedToInternet()) {
-                customURL = compileInfo(inputTag);
                 LoaderManager loaderManager = getLoaderManager();
                 loaderManager.initLoader(ARTICLE_LOADER_ID, null, this).forceLoad();
             } else {
@@ -53,54 +60,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.e(LOG_TAG, "Possible null Bundle Key: " + tag, e);
         }
     }
-    private String compileInfo(String input) {
-        customURL = "";
-        String apiKey = "&api-key=c49528a8-efe3-4f88-87ea-13530bb963b5";
-        String imgRequest = "&show-elements=image";
-        String apiFormat = "&format=json";
-        String relevanceRequest = "&order-by=relevance";
-        String fieldsRequest = "&show-fields=headline,byline,bodyText,thumbnail";
-        userInputTag = compileTag(input);
-        customURL = END_POINT_URL + userInputTag + apiFormat + fieldsRequest + imgRequest + relevanceRequest + apiKey;
-        return customURL;
-    }
-    private String compileTag(String tag) {
-        StringBuilder builder = new StringBuilder();
-        String queryCode = "q=";
-        String tagString = removeEndingEmptySpaces(tag);
-        String emptySpace = " ";
-        String urlEmptySpace = "%20";
-        builder.append(queryCode);
-        String[] stringList = tagString.split(emptySpace);
-        for (int i = 0; i < stringList.length; i++) {
-            int lastPos = stringList.length - 1;
-            String currentWord = stringList[i];
-            builder.append(currentWord);
-            if (i < lastPos) {
-                builder.append(urlEmptySpace);
-            }
-        }
-        return builder.toString();
-    }
-    private String removeEndingEmptySpaces(String tag) {
-        if (tag != null) {
-            CharSequence tagChar = tag;
-            String emptySpace = " ";
-            if (tag.contains(emptySpace)) {
-                if (tag.endsWith(emptySpace)) {
-                    int length = tag.length() - 1;
-                    tagChar = tag.substring(0, length);
-                }
-            }
-            return tagChar.toString();
-        }
-        return null;
+    private String getUserInput() {
+        String input = sharedPreferences.getString(
+                getString(R.string.user_input_key),
+                getString(R.string.user_input_default));
+        return input;
     }
     private boolean isConnectedToInternet() {
         boolean state = false;
         try {
-            ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
             state = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         } catch (NullPointerException e) {
             Log.e(LOG_TAG, e.toString());
@@ -146,7 +116,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
     @Override
     public Loader<ArrayList<Article>> onCreateLoader(int id, Bundle args) {
-        return new ArticleTaskLoader(this, customURL);
+        String orderBy = sharedPreferences.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default));
+        String limit = sharedPreferences.getString(
+                getString(R.string.settings_limit_key),
+                getString(R.string.settings_limit_default));
+        Uri baseUri = Uri.parse(END_POINT_URL);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter("q", inputTag);
+        uriBuilder.appendQueryParameter("show-fields", "all");
+        uriBuilder.appendQueryParameter("format", "json");
+        uriBuilder.appendQueryParameter("order-by", orderBy);
+        uriBuilder.appendQueryParameter("page-size", limit);
+        uriBuilder.appendQueryParameter("show-elements", "image");
+        uriBuilder.appendQueryParameter("api-key", QueryUtils.getApiKey());
+        return new ArticleTaskLoader(this, uriBuilder.toString());
     }
     @Override
     public void onLoadFinished(Loader<ArrayList<Article>> loader, ArrayList<Article> data) {
@@ -160,5 +145,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (adapter != null) {
             adapter.clear();
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Bundle bundle = new Bundle();
+            bundle.putString("tag", inputTag);
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            settingsIntent.putExtras(bundle);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

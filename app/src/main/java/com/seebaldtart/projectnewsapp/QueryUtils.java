@@ -20,10 +20,12 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 public final class QueryUtils {
+    private static String userInput = "";
     private static Context mContext;
     private static String LOG_TAG;
     private static ArrayList<Article> articleList;
     private static String mUrl;
+    private static String apiKey = "c49528a8-efe3-4f88-87ea-13530bb963b5";
     private QueryUtils(Context context, String url) {
         mContext = context;
         LOG_TAG = context.getClass().getSimpleName();
@@ -35,6 +37,8 @@ public final class QueryUtils {
         makeHTTPRequest(mUrl, articleList);
         return articleList;
     }
+    public static String getApiKey() { return apiKey; }
+    public static String getUserInput() { return userInput;}
     private static void makeHTTPRequest(String stringUrl, ArrayList<Article> articles) {
         String jsonResponse = "";
         URL url = null;
@@ -47,7 +51,7 @@ public final class QueryUtils {
             urlConnection.setReadTimeout(15000);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readInputStream(inputStream);
             } else {
@@ -155,9 +159,9 @@ public final class QueryUtils {
             Intent intent = new Intent(context, MainActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("tag", query);
+            userInput = query;
             intent.putExtras(bundle);
             context.startActivity(intent);
-
         }
     }
     public static String checkEntry(Context context, String entry) {

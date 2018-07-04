@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_title">
+    <EditTextPreference
+        android:defaultValue="@string/settings_limit_default"
+        android:key="@string/settings_limit_key"
+        android:inputType="numberDecimal"
+        android:selectAllOnFocus="true"
+        android:title="@string/settings_limit_label" />
+    <ListPreference
+        android:defaultValue="@string/settings_order_by_default"
+        android:key="@string/settings_order_by_key"
+        android:entries="@array/settings_order_by_labels"
+        android:entryValues="@array/settings_order_by_values"
+        android:title="@string/settings_order_by_label"/>
+    <EditTextPreference
+        android:defaultValue="@string/user_input_default"
+        android:key="@string/user_input_key"
+        android:inputType="text"
+        android:selectAllOnFocus="false"
+        android:visibility="gone"
+        android:clickable="false"/>
+</PreferenceScreen>
